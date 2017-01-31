@@ -1,7 +1,6 @@
 package treeexample;
 
 import View.Index;
-import java.awt.Graphics;
 import javax.swing.JFrame;
 
 /**

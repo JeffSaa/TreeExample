@@ -7,10 +7,12 @@ package Model;
 public class Node {
     
     private Node left, rigth;
+    private String name;
 
-    public Node() {
+    public Node(String name) {
         left = null;
         rigth = null;
+        this.name = name;
     }
 
     public Node getLeft() {
@@ -27,6 +29,10 @@ public class Node {
     
     public void setRigth(Node r){
         rigth = r;
+    }
+    
+    public String getName(){
+        return this.name;
     }
     
 }
