@@ -14,15 +14,11 @@ public class Index extends javax.swing.JFrame {
     
     Node root;
     Boolean sw;
-    DefaultTreeModel model;
-    DefaultMutableTreeNode node_root;
     
     public Index() {
         initComponents();
         root = new Node("1");
-        node_root = new DefaultMutableTreeNode(root.getName());
-        model = new DefaultTreeModel(node_root);
-        jTree.setModel(model);
+        drawTree(root);
     }
     
     @SuppressWarnings("unchecked")
@@ -40,8 +36,6 @@ public class Index extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        exist_text.setText("jTextField1");
-
         jButton1.setText("Buscar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -49,9 +43,7 @@ public class Index extends javax.swing.JFrame {
             }
         });
 
-        jToggle.setText("jToggleButton1");
-
-        setValueText.setText("jTextField1");
+        jToggle.setText("Izq o Der?");
 
         jButton2.setText("Agregar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -59,8 +51,6 @@ public class Index extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-
-        getValueText.setText("jTextField1");
 
         jScrollPane1.setViewportView(jTree);
 
@@ -74,20 +64,20 @@ public class Index extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(exist_text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(exist_text, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton2)
-                                .addGap(99, 99, 99))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(109, 109, 109))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(getValueText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(setValueText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(setValueText, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(getValueText, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jToggle)
                                 .addContainerGap())))))
         );
@@ -103,13 +93,12 @@ public class Index extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(exist_text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1))
+                            .addComponent(jButton1)
+                            .addComponent(setValueText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(31, 31, 31))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jToggle)
-                            .addComponent(setValueText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jToggle)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton2)
                         .addGap(5, 5, 5))))
         );
@@ -123,10 +112,33 @@ public class Index extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        setValue(jToggle.isSelected(), getValueText.getText(), setValueText.getText(), root);
-           
+        setValue(jToggle.isSelected(), jTree.getLastSelectedPathComponent().toString()
+                , setValueText.getText(), root);
+        drawTree(root);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void drawTree(Node node){
+        DefaultMutableTreeNode tNode = new DefaultMutableTreeNode(node.getName());
+        generateNodes(node, tNode);
+        DefaultTreeModel model = new DefaultTreeModel(tNode);
+        jTree.setModel(model);
+    }
+    
+    private void generateNodes(Node node, DefaultMutableTreeNode tNode){
+        if (node.getLeft() != null) {
+            DefaultMutableTreeNode dn = new DefaultMutableTreeNode(node.getLeft().
+                    getName());
+            tNode.add(dn);
+            generateNodes(node.getLeft(), dn);
+        }
+        if (node.getRigth() != null) {
+            DefaultMutableTreeNode dn = new DefaultMutableTreeNode(node.getRigth().
+                    getName());
+            tNode.add(dn);
+            generateNodes(node.getRigth(), dn);
+        }
+    }
+    
     public static void main(String args[]) {
         
         try {
